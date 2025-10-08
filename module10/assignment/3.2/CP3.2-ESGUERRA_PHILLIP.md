@@ -97,3 +97,9 @@ Same with this prompt, changing the steps doesn't provide any noticeable changes
 | Seed: `42069`, Steps: `30` | ![cat3](cat-civil-war_seed42069_steps30.png) |
 
 Changing the seed on the other hand changes the output dramatically. At seed 420, an output error can be seen that the horse is anatomically incorrect in it's posing and can be seen that it has 5 legs. At step 42069, it's a horse that looks like a cat.
+
+<style>
+td > img {
+    width: 400px;
+}
+</style>
