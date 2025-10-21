@@ -1,8 +1,8 @@
+from typing import Annotated
 from haystack.components.agents import Agent
-from typing import Annotated, Literal
+from haystack.dataclasses import ChatMessage
 from haystack.tools import tool
 from haystack.tools.tool import Tool
-from haystack.dataclasses import ChatMessage
 
 from factory import create_chat_generator
 
