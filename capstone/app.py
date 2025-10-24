@@ -23,6 +23,14 @@ if __name__ == "__main__":
     
     agent = OrchestratorAgent()
 
-    user_message = ChatMessage.from_user("Plan my itinerary in Manila on October 23?")
+    user_message = ChatMessage.from_user("Using this ./ra 12305-clean.txt file path, can you help me understand the final provisions in Liability and Financial Security in the Event of a Nuclear Accident? Summarize in ELI5.")
     response = agent.run([user_message])
     print(response["last_message"].text)
+    
+    # from rag_pipeline import run_incontext_pipeline
+
+    # file_path = "./ra 12305-clean.txt"
+    # query = "What are the final provisions in Liability and Financial Security in the Event of a Nuclear Accident? Summarize in baby uwu tone."
+    # response = run_incontext_pipeline(file_path, query)
+    # print(response)
+    

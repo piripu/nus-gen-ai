@@ -11,6 +11,15 @@ def create_chat_generator():
         # api key is alreadu supplied from environment variable
         return OpenAIChatGenerator(model=config.OPENAI_CHAT_MODEL_NAME)
 
+def create_generator():
+    if config.USE_LOCAL_MODEL:
+        from haystack_integrations.components.generators.ollama import OllamaGenerator
+        return OllamaGenerator(model=config.OLLAMA_CHAT_MODEL_NAME)
+    else:
+        from haystack.components.generators import OpenAIGenerator
+        # api key is alreadu supplied from environment variable
+        return OpenAIGenerator(model=config.OPENAI_CHAT_MODEL_NAME)
+
 def create_document_embedder():
     if config.USE_LOCAL_MODEL:
         from haystack_integrations.components.embedders.ollama import OllamaDocumentEmbedder
