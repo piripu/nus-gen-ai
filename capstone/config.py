@@ -7,11 +7,14 @@ WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
 
 LOG_LEVEL = "DEBUG"
 
-OPENAI_MODEL_NAME = "gpt-4"
-# OLLAMA_MODEL_NAME = "qwen3:8b"
-OLLAMA_MODEL_NAME = "llama3.1:8b-instruct-q8_0"
+OPENAI_CHAT_MODEL_NAME = "gpt-4"
+OLLAMA_CHAT_MODEL_NAME = "qwen3:8b"
+OLLAMA_EMBEDDING_MODEL_NAME = "embeddinggemma"
 
-ENABLE_LOCAL=True
+USER_DOCS_DIR = "user_docs"
+
+USE_LOCAL_MODEL=True
+USE_INMEMORY=True
 
 def load_config():
     load_dotenv()

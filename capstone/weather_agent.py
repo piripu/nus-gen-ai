@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Literal
 from haystack.components.agents import Agent
 from haystack.dataclasses import ChatMessage
 from haystack.tools import tool
