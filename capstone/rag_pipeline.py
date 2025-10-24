@@ -1,4 +1,4 @@
-from haystack.components.builders import ChatPromptBuilder
+from haystack.components.builders import ChatPromptBuilder, AnswerBuilder
 from haystack.components.converters import PyPDFToDocument, TextFileToDocument, MarkdownToDocument
 from haystack.components.joiners import DocumentJoiner
 from haystack.components.preprocessors import DocumentCleaner
@@ -11,16 +11,22 @@ from haystack.document_stores.in_memory import InMemoryDocumentStore
 
 import factory
 
-prompt = """
+system_prompt = "You are a helpful assistant that provides answers based on the provided context from user documents."
+user_prompt = """
 Answer the query based on the provided context.
 If the context does not contain the answer, say 'Answer not found'.
 Context:
 {% for doc in documents %}
   {{ doc.content }}
 {% endfor %}
-query: {{query}}
+Query: {{query}}
 Answer:
 """
+
+prompt_template = [
+    ChatMessage.from_system(system_prompt),
+    ChatMessage.from_user(user_prompt)
+]
 
 def create_document_store():
     return InMemoryDocumentStore()
@@ -81,17 +87,39 @@ def create_query_pipeline(document_store, pipeline: Pipeline = Pipeline(), print
     
     retriever = factory.create_retriever(document_store=document_store)
     pipeline.add_component("retriever", retriever)
-    
-    template = [ChatMessage.from_user(prompt)]
-    pipeline.add_component("prompt_builder", ChatPromptBuilder(template=template))
+
+    pipeline.add_component("prompt_builder", ChatPromptBuilder(template=prompt_template))
 
     pipeline.add_component("llm", factory.create_chat_generator())
-
+    # pipeline.add_component(instance=AnswerBuilder(), name="answer_builder")
+    
     pipeline.connect("embedder", "retriever.query_embedding")
     pipeline.connect("retriever.documents", "prompt_builder.documents")
     pipeline.connect("prompt_builder", "llm")
-
+    # pipeline.connect("llm.replies", "answer_builder.replies")
+    # pipeline.connect("retriever.documents", "answer_builder.documents")
+    
     if print_pipeline:
         pipeline.draw(path=r"./.assets/query_pipeline.png")
 
     return pipeline
+
+def run_incontext_pipeline(file_path: str, query: str) -> str:
+    document_store = create_document_store()
+    ingestion_pipeline = create_ingestion_pipeline(document_store)
+    
+    ingestion_pipeline.run(
+        {
+            "file_router": {
+                "sources": [file_path]
+            }
+        }
+    )
+
+    query_pipeline = create_query_pipeline(document_store=document_store)
+    response = query_pipeline.run({
+        "embedder": { "text": query },
+        "prompt_builder": { "query": query }
+    })
+    
+    return response["llm"]["replies"][-1].text
