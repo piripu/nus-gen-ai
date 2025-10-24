@@ -103,23 +103,3 @@ def create_query_pipeline(document_store, pipeline: Pipeline = Pipeline(), print
         pipeline.draw(path=r"./.assets/query_pipeline.png")
 
     return pipeline
-
-def run_incontext_pipeline(file_path: str, query: str) -> str:
-    document_store = create_document_store()
-    ingestion_pipeline = create_ingestion_pipeline(document_store)
-    
-    ingestion_pipeline.run(
-        {
-            "file_router": {
-                "sources": [file_path]
-            }
-        }
-    )
-
-    query_pipeline = create_query_pipeline(document_store=document_store)
-    response = query_pipeline.run({
-        "embedder": { "text": query },
-        "prompt_builder": { "query": query }
-    })
-    
-    return response["llm"]["replies"][-1].text

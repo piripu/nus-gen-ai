@@ -7,6 +7,7 @@ from factory import create_chat_generator
 from weather_agent import WeatherAgentTool
 from events_agent import EventsAgentTool
 from document_agent import DocumentAgentTool
+from image_generation_agent import ImageGenerationAgentTool
 # orchestrator states
 # date: str, time:str, location:str, weather:str, calendar_events:list[str]
 
@@ -26,7 +27,8 @@ def get_agent_tools() -> list[Tool]:
         get_current_date,
         WeatherAgentTool(),
         EventsAgentTool(),
-        DocumentAgentTool()
+        DocumentAgentTool(),
+        ImageGenerationAgentTool()
     ]
 
 SYSTEM_PROMPT = """You are an orchestrator agent that can assist users by leveraging multiple specialized agents to fulfill their requests.

@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 
 @tool
 def get_weather(
-  location: Annotated[str, "the city for which to get the weather"],
-  unit: Annotated[Literal["Celsius", "Fahrenheit"], "the unit for the temperature"] = "Celsius"):
-  '''A simple function to get the current weather for a location.'''
-  return f"Weather report for {location}: 20 {unit}, sunny"
+    location: Annotated[str, "the city for which to get the weather"],
+    unit: Annotated[Literal["Celsius", "Fahrenheit"], "the unit for the temperature"] = "Celsius"):
+    '''A simple function to get the current weather for a location.'''
+    return f"Weather report for {location}: 20 {unit}, sunny"
 
 class WeatherAgent(Agent):
     def __init__(self):

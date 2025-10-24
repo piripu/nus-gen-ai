@@ -6,7 +6,7 @@ from typing import Annotated
 
 import config, logging, os
 from factory import create_chat_generator
-from rag_pipeline import run_incontext_pipeline
+from rag_pipeline import create_document_store, create_ingestion_pipeline, create_query_pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +14,24 @@ logger = logging.getLogger(__name__)
 user_docs = config.USER_DOCS_DIR
 if not os.path.exists(user_docs):
     os.makedirs(user_docs)
+
+def run_incontext_pipeline(file_path: str, query: str) -> str:
+    document_store = create_document_store()
+    ingestion_pipeline = create_ingestion_pipeline(document_store)
+    
+    ingestion_pipeline.run({
+        "file_router": {
+            "sources": [file_path]
+        }
+    })
+
+    query_pipeline = create_query_pipeline(document_store=document_store)
+    response = query_pipeline.run({
+        "embedder": { "text": query },
+        "prompt_builder": { "query": query }
+    })
+    
+    return response["llm"]["replies"][-1].text
 
 @tool
 def query_document(

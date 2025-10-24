@@ -24,13 +24,16 @@ if __name__ == "__main__":
     agent = OrchestratorAgent()
 
     user_message = ChatMessage.from_user("Using this ./ra 12305-clean.txt file path, can you help me understand the final provisions in Liability and Financial Security in the Event of a Nuclear Accident? Summarize in ELI5.")
+    # user_message = ChatMessage.from_user("create an image of a futuristic city skyline at sunset with flying cars and neon lights.")
     response = agent.run([user_message])
     print(response["last_message"].text)
     
-    # from rag_pipeline import run_incontext_pipeline
-
-    # file_path = "./ra 12305-clean.txt"
-    # query = "What are the final provisions in Liability and Financial Security in the Event of a Nuclear Accident? Summarize in baby uwu tone."
-    # response = run_incontext_pipeline(file_path, query)
-    # print(response)
+    user_message = ChatMessage.from_user("Plan my itinerary on a day trip in Manila on October 25")
+    response2 = agent.run([user_message])
+    print(response2["last_message"].text)
     
+    # from image_generation_agent import generate_image
+    
+    # result = generate_image.invoke(prompt="create an image of a futuristic city skyline at sunset with flying cars and neon lights.")
+
+    # print(result)

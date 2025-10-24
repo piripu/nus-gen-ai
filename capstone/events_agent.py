@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 
 @tool
 def get_event(
-  location: Annotated[str, "the city for which to get the events"],
-  date: Annotated[str, "the date for which to get the events. Format: YYYY-MM-DD"]):
-  '''A simple function to get the current events for a location.'''
-  return f"Events in {location} on {date}: Concert, Art Exhibition"
+    location: Annotated[str, "the city for which to get the events"],
+    date: Annotated[str, "the date for which to get the events. Format: YYYY-MM-DD"]):
+    '''A simple function to get the current events for a location.'''
+    return f"Events in {location} on {date}: Concert, Art Exhibition"
 
 class EventsAgent(Agent):
     def __init__(self):
