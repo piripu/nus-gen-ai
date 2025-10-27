@@ -9,6 +9,7 @@ from weather_agent import WeatherAgentTool
 from events_agent import EventsAgentTool
 from document_agent import DocumentAgentTool
 from image_generation_agent import ImageGenerationAgentTool
+from recommendations_agent import RecommendationsAgentTool
 # orchestrator states
 # date: str, time:str, location:str, weather:str, calendar_events:list[str]
 
@@ -29,7 +30,8 @@ def get_agent_tools() -> list[Tool]:
         WeatherAgentTool(),
         EventsAgentTool(),
         DocumentAgentTool(),
-        ImageGenerationAgentTool()
+        ImageGenerationAgentTool(),
+        RecommendationsAgentTool()
     ]
 
 SYSTEM_PROMPT = """You are an orchestrator agent that will assist <name_of_user>{name}</name_of_user> by leveraging multiple specialized agents to fulfill their requests.

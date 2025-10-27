@@ -7,7 +7,7 @@ from haystack.components.generators import DALLEImageGenerator
 
 from factory import create_chat_generator
 
-import logging, base64, os, config
+import logging, base64, os, conversation_manager
 logger = logging.getLogger(__name__)
 
 @tool
@@ -15,14 +15,15 @@ def generate_image(
     prompt: Annotated[str, "the prompt for the image generation"]):
     '''Function to generate an image based on the prompt and provide the file path of the generated image.'''
 
+    #TODO: create pipeline that also uses the long message to create a short title for the image
     image_generator = DALLEImageGenerator(
         response_format="b64_json"
     )
     image_generator.warm_up()
     response = image_generator.run(prompt)
     image_bytes = base64.b64decode(response["images"][0])
-    output_image_path = os.path.join(config.USER_DOCS_DIR, "output.png")
-    
+    output_image_path = os.path.join(conversation_manager.get_user_conversation_dir(), "output.png")
+
     with open(output_image_path, "wb") as f:
         f.write(image_bytes)
 

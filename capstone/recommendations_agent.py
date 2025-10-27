@@ -12,25 +12,24 @@ logger = logging.getLogger(__name__)
 @tool
 def search_web(
     query: Annotated[str, "query to search the web"]):
-    '''A simple function to search the web. Use this tool to look for events and recommendations using the web..'''
+    '''A simple function to search the web. Use this tool to look for events, itinerary and recommendations using the web..'''
     return f"Search results for '{query}': ..."
 
-class EventsAgent(Agent):
+class RecommendationsAgent(Agent):
     def __init__(self):
         super().__init__(
             chat_generator=create_chat_generator(),
-            # system_prompt="You are a weather information agent. Use the tools available to provide accurate weather data.",
-            system_prompt="You are an event information agent. This is for debug for now, just return a realistic event for a given location",
-            tools=[get_event])
+            system_prompt="""You are a itinerary recommendations agent.
+            Use the web search tool to provide more accurate itinerary recommendations based on user needs.""",
+            tools=[search_web])
         
-# We create a tool wrapper for the weather agent that only takes a message as input
-class EventsAgentTool(Tool):
-    name = "events_agent_tool"
-    description = "A tool that provides event information based on user queries."
+class RecommendationsAgentTool(Tool):
+    name = "recommendations_agent_tool"
+    description = "A tool that uses web search to provides event, itinerary and travel information based on user queries."
 
     def __init__(self):
-        self.agent = EventsAgent()
-        
+        self.agent = RecommendationsAgent()
+
         super().__init__(
             name=self.name,
             description=self.description,
@@ -39,13 +38,12 @@ class EventsAgentTool(Tool):
                 "properties": {
                     "message": {
                         "type": "string",
-                        "description": "Request message to get event information for a specific location. Date and time may be included when possible."
+                        "description": "Request message to get event, itinerary and travel information for a specific location. Date and time may be included when possible."
                     }
                 },
                 "required": ["message"]
             },
             function=self._run
-            # function=lambda args: print(args)
         )
 
     def _run(self, message: str) -> str:
