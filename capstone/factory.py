@@ -52,3 +52,7 @@ def create_retriever(**kwargs):
     else:
         from haystack_integrations.components.retrievers.chroma import ChromaEmbeddingRetriever
         return ChromaEmbeddingRetriever(**kwargs)
+
+def create_chatmessage_store():
+    from haystack_experimental.chat_message_stores.in_memory import InMemoryChatMessageStore
+    return InMemoryChatMessageStore()

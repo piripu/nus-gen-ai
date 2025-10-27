@@ -16,5 +16,8 @@ USER_DOCS_DIR = "user_docs"
 USE_LOCAL_MODEL=True
 USE_INMEMORY=True
 
+# Uses an LLM to generate mock weather data instead of calling a real weather API
+USE_MOCK_WEATHER=False
+
 def load_config():
     load_dotenv()
