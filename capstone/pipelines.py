@@ -1,5 +1,6 @@
-from haystack.components.builders import ChatPromptBuilder, AnswerBuilder
+from haystack.components.builders import ChatPromptBuilder, PromptBuilder
 from haystack.components.converters import PyPDFToDocument, TextFileToDocument, MarkdownToDocument
+from haystack.components.generators import DALLEImageGenerator
 from haystack.components.joiners import DocumentJoiner
 from haystack.components.preprocessors import DocumentCleaner
 from haystack.components.preprocessors import DocumentSplitter
@@ -103,3 +104,34 @@ def create_query_pipeline(document_store, pipeline: Pipeline = Pipeline(), print
         pipeline.draw(path=r"./.assets/query_pipeline.png")
 
     return pipeline
+
+
+TITLE_GENERATION_PROMPT_TEMPLATE = """
+You are a title generator for images.
+Given a revised prompt of the generated image, generate a concise and descriptive title for the image in less than 4 words or less than 25 characters.
+The title should capture the essence of the image and be engaging.
+Provide the title in kebab-case format, all lowercase, with words separated by hyphens.
+
+<revised_prompt>
+{{revised_prompt}}
+</revised_prompt>
+"""
+
+def create_image_generation_pipeline() -> Pipeline:
+    pipeline = Pipeline()
+    image_generator = DALLEImageGenerator(
+        response_format="b64_json"
+    )
+    pipeline.add_component("image_generator", image_generator)
+
+    title_generator = factory.create_generator()
+    pipeline.add_component("title_generator", title_generator)
+
+    title_prompt_builder = PromptBuilder(template=TITLE_GENERATION_PROMPT_TEMPLATE, required_variables=["revised_prompt"])
+    pipeline.add_component("title_prompt_builder", title_prompt_builder)
+
+    pipeline.connect("image_generator.revised_prompt", "title_prompt_builder.revised_prompt")
+    pipeline.connect("title_prompt_builder.prompt", "title_generator.prompt")
+
+    return pipeline
+

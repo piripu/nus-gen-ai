@@ -1,11 +1,13 @@
 from typing import Annotated
 from haystack.components.agents import Agent
+
+from haystack.core.pipeline import Pipeline
 from haystack.dataclasses import ChatMessage
 from haystack.tools import tool
 from haystack.tools.tool import Tool
-from haystack.components.generators import DALLEImageGenerator
 
 from factory import create_chat_generator
+from pipelines import create_image_generation_pipeline
 
 import logging, base64, os, conversation_manager
 logger = logging.getLogger(__name__)
@@ -13,21 +15,29 @@ logger = logging.getLogger(__name__)
 @tool
 def generate_image(
     prompt: Annotated[str, "the prompt for the image generation"]):
-    '''Function to generate an image based on the prompt and provide the file path of the generated image.'''
+    '''Function to generate an image based on the prompt and provide the file path of the generated image. Use this tool only once per run.'''
 
-    #TODO: create pipeline that also uses the long message to create a short title for the image
-    image_generator = DALLEImageGenerator(
-        response_format="b64_json"
+    pipeline = create_image_generation_pipeline()
+    pipeline.draw(path="image_generation_pipeline.png")
+    
+    response = pipeline.run(
+        data = {
+            "prompt": prompt
+        },
+        include_outputs_from=["image_generator", "title_generator"]
     )
-    image_generator.warm_up()
-    response = image_generator.run(prompt)
-    image_bytes = base64.b64decode(response["images"][0])
-    output_image_path = os.path.join(conversation_manager.get_user_conversation_dir(), "output.png")
+
+    image_bytes = base64.b64decode(response["image_generator"]["images"][0])
+    title = response["title_generator"]["replies"][-1].strip()
+    output_image_path = os.path.join(conversation_manager.get_user_conversation_dir(), f"{title}.png")
 
     with open(output_image_path, "wb") as f:
         f.write(image_bytes)
 
-    return output_image_path
+    return {
+        "image_path": output_image_path,
+        "revised_prompt": response["image_generator"]["revised_prompt"]
+    }
 
 class ImageGenerationAgent(Agent):
     def __init__(self):
@@ -36,6 +46,8 @@ class ImageGenerationAgent(Agent):
             system_prompt="""You are an image generation agent.
             Use the tools available to generate images based on user prompts and provide the file path of the generated image back to the user.
             Once the tool provided the image path, respond with the image path only and tell the user that the image has been generated.
+            ONLY USE THE TOOL ONCE PLEASE!
+            Be friendly and provide a bit of insight about the generated `revised_prompt` from the tool.
             Do not reply in markdown format.""",
             tools=[generate_image])
         

@@ -34,7 +34,7 @@ if __name__ == "__main__":
     print(f"[bold {assistant_chat_color}]Enter your name to start[/bold {assistant_chat_color}]: ", end="")
     name = input()
 
-    user_dir = conversation_manager.get_user_conversation_dir(name)
+    user_dir = conversation_manager.get_user_conversation_dir()
     configure_file_logger(user_dir)
     chat_store = factory.create_chatmessage_store()
     

@@ -6,7 +6,7 @@ from typing import Annotated
 
 import config, logging, os
 from factory import create_chat_generator
-from rag_pipeline import create_document_store, create_ingestion_pipeline, create_query_pipeline
+from pipelines import create_document_store, create_ingestion_pipeline, create_query_pipeline
 
 logger = logging.getLogger(__name__)
 

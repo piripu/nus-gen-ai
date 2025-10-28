@@ -4,7 +4,7 @@ from datetime import datetime
 
 import config, os
 
-def get_user_conversation_dir(name: str) -> str:
+def get_user_conversation_dir() -> str:
 
     if config.CURRENT_USER_DIR is not None:
         return config.CURRENT_USER_DIR
@@ -13,8 +13,8 @@ def get_user_conversation_dir(name: str) -> str:
     if not os.path.exists(user_docs):
         os.makedirs(user_docs)
         
-    timenow = datetime.now().strftime("%Y%m%d_%H%M%S")
-    user_dir = os.path.join(user_docs, f"{name}_{timenow}")
+    timenow = datetime.now().strftime("%y%m%d%H%M%S")
+    user_dir = os.path.join(user_docs, f"{timenow}")
     os.makedirs(user_dir)
 
     config.CURRENT_USER_DIR = user_dir
