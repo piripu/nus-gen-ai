@@ -4,12 +4,12 @@ from haystack.tools import tool
 from haystack.tools.tool import Tool
 
 import logging
-from factory import create_chat_generator
 from agents.weather_agent import WeatherAgentTool
 from agents.events_agent import EventsAgentTool
 from agents.document_agent import DocumentAgentTool
 from agents.image_generation_agent import ImageGenerationAgentTool
 from agents.recommendations_agent import RecommendationsAgentTool
+from helpers.factory import create_chat_generator
 # orchestrator states
 # date: str, time:str, location:str, weather:str, calendar_events:list[str]
 

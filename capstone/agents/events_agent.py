@@ -4,7 +4,7 @@ from haystack.dataclasses import ChatMessage
 from haystack.tools import tool
 from haystack.tools.tool import Tool
 
-from factory import create_chat_generator
+from helpers.factory import create_chat_generator
 
 import logging
 logger = logging.getLogger(__name__)

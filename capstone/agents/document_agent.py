@@ -5,8 +5,8 @@ from haystack.tools.tool import Tool
 from typing import Annotated
 
 import config, logging, os
-from factory import create_chat_generator
-from pipelines import create_document_store, create_ingestion_pipeline, create_query_pipeline
+from helpers.factory import create_chat_generator
+from helpers.pipelines import create_document_store, create_ingestion_pipeline, create_query_pipeline
 
 logger = logging.getLogger(__name__)
 

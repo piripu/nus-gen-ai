@@ -10,7 +10,7 @@ from haystack.core.pipeline import Pipeline
 from haystack.dataclasses import ChatMessage
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 
-import factory
+from helpers import factory
 
 system_prompt = "You are a helpful assistant that provides answers based on the provided context from user documents."
 user_prompt = """

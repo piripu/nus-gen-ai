@@ -1,9 +1,10 @@
 from haystack.dataclasses import ChatMessage, ChatRole
 from rich import print
 
-import config, logging, conversation_manager, os, factory
+import config, logging, os
 from config import load_config
 from agents.orchestrator_agent import OrchestratorAgent
+from helpers import factory, conversation_manager
 
 load_config()
 

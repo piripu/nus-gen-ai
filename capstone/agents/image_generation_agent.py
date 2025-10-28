@@ -6,10 +6,11 @@ from haystack.dataclasses import ChatMessage
 from haystack.tools import tool
 from haystack.tools.tool import Tool
 
-from factory import create_chat_generator
-from pipelines import create_image_generation_pipeline
+from helpers import conversation_manager
+from helpers.factory import create_chat_generator
+from helpers.pipelines import create_image_generation_pipeline
 
-import logging, base64, os, conversation_manager
+import logging, base64, os
 logger = logging.getLogger(__name__)
 
 @tool
