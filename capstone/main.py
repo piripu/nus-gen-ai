@@ -3,7 +3,7 @@ from rich import print
 
 import config, logging, conversation_manager, os, factory
 from config import load_config
-from orchestrator_agent import OrchestratorAgent
+from agents.orchestrator_agent import OrchestratorAgent
 
 load_config()
 

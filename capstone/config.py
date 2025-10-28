@@ -11,7 +11,7 @@ OPENAI_CHAT_MODEL_NAME = "gpt-4"
 OLLAMA_CHAT_MODEL_NAME = "qwen3:8b"
 OLLAMA_EMBEDDING_MODEL_NAME = "embeddinggemma"
 
-USER_DOCS_DIR = "user_docs"
+USER_DOCS_DIR = ".user_docs"
 
 USE_LOCAL_MODEL = True
 USE_INMEMORY = True
