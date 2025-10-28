@@ -117,8 +117,7 @@ Provide the title in kebab-case format, all lowercase, with words separated by h
 </revised_prompt>
 """
 
-def create_image_generation_pipeline() -> Pipeline:
-    pipeline = Pipeline()
+def create_image_generation_pipeline(pipeline: Pipeline = Pipeline(), print_pipeline: bool = True) -> Pipeline:
     image_generator = DALLEImageGenerator(
         response_format="b64_json"
     )
@@ -132,6 +131,9 @@ def create_image_generation_pipeline() -> Pipeline:
 
     pipeline.connect("image_generator.revised_prompt", "title_prompt_builder.revised_prompt")
     pipeline.connect("title_prompt_builder.prompt", "title_generator.prompt")
+
+    if print_pipeline:
+        pipeline.draw(path=r"./.assets/ingestion_pipeline.png")
 
     return pipeline
 
