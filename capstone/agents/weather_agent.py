@@ -4,16 +4,24 @@ from haystack.dataclasses import ChatMessage
 from haystack.tools import tool
 from haystack.tools.tool import Tool
 
+import helpers.weather as weather
 from helpers.factory import create_chat_generator
 
 import logging
 logger = logging.getLogger(__name__)
 
 @tool
-def get_weather(
+def get_current_weather(
     location: Annotated[str, "the city for which to get the weather"],
     unit: Annotated[Literal["Celsius", "Fahrenheit"], "the unit for the temperature"] = "Celsius"):
-    '''A simple function to get the current weather for a location.'''
+    '''Get the current weather for a location.'''
+    
+    try:
+        weather_report = weather.get_current_weather(location, unit)
+        return weather_report.data
+    except Exception as e:
+        logger.error(f"Error getting weather for {location}: {e}")
+    
     return f"Weather report for {location}: 20 {unit}, sunny"
 
 class WeatherAgent(Agent):
