@@ -4,9 +4,10 @@ from rich import print
 import config, logging, os
 from config import load_config
 from agents.orchestrator_agent import OrchestratorAgent
-from helpers import factory, conversation_manager
+from helpers import factory, conversation_manager, database
 
 load_config()
+database.seed()
 
 assistant_chat_color = "green"
 user_chat_color = "blue"

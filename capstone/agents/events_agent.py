@@ -4,25 +4,28 @@ from haystack.dataclasses import ChatMessage
 from haystack.tools import tool
 from haystack.tools.tool import Tool
 
+import helpers.database as db
 from helpers.factory import create_chat_generator
+from helpers import ListJSONEncoder
 
-import logging
+import logging, json
 logger = logging.getLogger(__name__)
 
 @tool
-def get_event(
-    location: Annotated[str, "the city for which to get the events"],
+def get_events(
     date: Annotated[str, "the date for which to get the events. Format: YYYY-MM-DD"]):
-    '''A simple function to get the current events for a location.'''
-    return f"Events in {location} on {date}: Concert, Art Exhibition"
+    '''Get the for list of events for a specific date.'''
+    events = db.get_events_by_date(date)
+    if not events:
+        return json.dumps([])
+    return json.dumps(events, cls=ListJSONEncoder)
 
 class EventsAgent(Agent):
     def __init__(self):
         super().__init__(
             chat_generator=create_chat_generator(),
-            # system_prompt="You are a weather information agent. Use the tools available to provide accurate weather data.",
-            system_prompt="You are an event information agent. This is for debug for now, just return a realistic event for a given location",
-            tools=[get_event])
+            system_prompt="You are an event information agent. Use the tools available to get list of events for a specific date.",
+            tools=[get_events])
         
 # We create a tool wrapper for the weather agent that only takes a message as input
 class EventsAgentTool(Tool):
@@ -40,7 +43,7 @@ class EventsAgentTool(Tool):
                 "properties": {
                     "message": {
                         "type": "string",
-                        "description": "Request message to get event information for a specific location. Date and time may be included when possible."
+                        "description": "Request message to get event information for a date. List of events is only feasible up until 14 days from the current date."
                     }
                 },
                 "required": ["message"]
