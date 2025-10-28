@@ -1,5 +1,6 @@
 from typing import Annotated
 from haystack.components.agents import Agent
+from haystack.components.websearch import SerperDevWebSearch
 from haystack.dataclasses import ChatMessage
 from haystack.tools import tool
 from haystack.tools.tool import Tool
@@ -13,7 +14,9 @@ logger = logging.getLogger(__name__)
 def search_web(
     query: Annotated[str, "query to search the web"]):
     '''A simple function to search the web. Use this tool to look for events, itinerary and recommendations using the web..'''
-    return f"Search results for '{query}': ..."
+    logger.debug(f"Searching the web for: {query}")
+    web_search = SerperDevWebSearch()
+    return web_search.run(query)
 
 class RecommendationsAgent(Agent):
     def __init__(self):
