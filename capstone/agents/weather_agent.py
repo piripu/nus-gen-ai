@@ -12,25 +12,26 @@ logger = logging.getLogger(__name__)
 
 @tool
 def get_current_weather(
-    location: Annotated[str, "the city for which to get the weather"],
-    unit: Annotated[Literal["Celsius", "Fahrenheit"], "the unit for the temperature"] = "Celsius"):
+    location: Annotated[str, "the city for which to get the weather"]):
     '''Get the current weather for a location.'''
-    
     try:
-        weather_report = weather.get_current_weather(location, unit)
-        return weather_report.data
+        result = weather.get_current_weather(location)
+        logger.debug("Weather fetch result: %s", str(result))
+
+        if result.success:
+            return result.data
+        else:
+            return result.error
     except Exception as e:
         logger.error(f"Error getting weather for {location}: {e}")
-    
-    return f"Weather report for {location}: 20 {unit}, sunny"
+        return f"Could not retrieve weather data for {location}."
 
 class WeatherAgent(Agent):
     def __init__(self):
         super().__init__(
             chat_generator=create_chat_generator(),
-            # system_prompt="You are a weather information agent. Use the tools available to provide accurate weather data.",
-            system_prompt="You are a weather information agent. This is for debug for now, just return a realistic weather report without using the tool.",
-            tools=[get_weather])
+            system_prompt="You are a weather information agent. Use the tools available to provide accurate weather data.",
+            tools=[get_current_weather])
         
 # We create a tool wrapper for the weather agent that only takes a message as input
 class WeatherAgentTool(Tool):

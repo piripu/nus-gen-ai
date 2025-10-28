@@ -12,7 +12,7 @@ class Result(Generic[T]):
     def __str__(self):
         return json.dumps({
             "success": self.success,
-            "data": self.data,
+            "data": self.data.to_dict() if self.data else None,
             "error": self.error
         })
 
