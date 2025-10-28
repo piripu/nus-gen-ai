@@ -15,7 +15,6 @@ from helpers.factory import create_chat_generator
 
 logger = logging.getLogger(__name__)
 
-@tool
 def get_current_date():
     '''A simple function to get the current date.'''
     from datetime import datetime
@@ -26,7 +25,6 @@ def get_current_date():
 
 def get_agent_tools() -> list[Tool]:
     return [
-        get_current_date,
         WeatherAgentTool(),
         EventsAgentTool(),
         DocumentAgentTool(),
@@ -39,6 +37,10 @@ You may have the following tasks, provide weather forecasts, suggest events happ
 and answer questions based on user documents. Always ensure that the information you provide is accurate and relevant to the user's request.
 When you respond, be concise and to the point and try to include the name of the user in your responses if only possible.
 Do not respond in markdown format. Outputs will be displayed in console.
+
+<current_date_time>
+{current_date_time}
+</current_date_time>
 """
 
 class OrchestratorAgent(Agent):
@@ -46,7 +48,7 @@ class OrchestratorAgent(Agent):
         self.user_name = user_name
         super().__init__(
             chat_generator=create_chat_generator(),
-            system_prompt=SYSTEM_PROMPT.format(name=user_name),
+            system_prompt=SYSTEM_PROMPT.format(name=user_name, current_date_time=get_current_date()),
             tools=get_agent_tools(),
         )
     
