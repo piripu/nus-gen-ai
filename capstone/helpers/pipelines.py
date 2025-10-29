@@ -133,7 +133,7 @@ def create_image_generation_pipeline(pipeline: Pipeline = Pipeline(), print_pipe
     pipeline.connect("title_prompt_builder.prompt", "title_generator.prompt")
 
     if print_pipeline:
-        pipeline.draw(path=r"./.assets/image_gen_pipeline.png")
+        pipeline.draw(path=r"./.assets/image_generation_pipeline.png")
 
     return pipeline
 

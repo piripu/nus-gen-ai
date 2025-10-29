@@ -18,7 +18,6 @@ def generate_image(
     '''Function to generate an image based on the prompt and provide the file path of the generated image. Use this tool only once per run.'''
 
     pipeline = create_image_generation_pipeline()
-    pipeline.draw(path="image_generation_pipeline.png")
     
     response = pipeline.run(
         data = {

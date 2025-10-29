@@ -54,7 +54,9 @@ class WeatherAgent(Agent):
 # We create a tool wrapper for the weather agent that only takes a message as input
 class WeatherAgentTool(Tool):
     name = "weather_agent_tool"
-    description = "A tool that provides weather information based on user queries. Location is REQUIRED. Ask for the user's location if it is not provided yet."
+    description = """A tool that provides weather information based on user queries.
+    Provide the current date today. Provide future dates for forecast up until 14 days from the current date.
+    Location is REQUIRED. Ask for the user's location if it is not provided yet."""
 
     def __init__(self):
         self.agent = WeatherAgent()

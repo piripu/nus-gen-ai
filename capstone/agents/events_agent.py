@@ -30,7 +30,9 @@ class EventsAgent(Agent):
 # We create a tool wrapper for the weather agent that only takes a message as input
 class EventsAgentTool(Tool):
     name = "events_agent_tool"
-    description = "A tool that provides event information based on user queries."
+    description = """A tool that provides event information based on user queries. 
+    Provide the current date today.
+    Provide future dates for events up until 14 days from the current date."""
 
     def __init__(self):
         self.agent = EventsAgent()
@@ -43,7 +45,7 @@ class EventsAgentTool(Tool):
                 "properties": {
                     "message": {
                         "type": "string",
-                        "description": "Request message to get event information for a date. List of events is only feasible up until 14 days from the current date."
+                        "description": "Request message to get event information for a date. Provide the current date today. List of events is only feasible up until 14 days from the current date."
                     }
                 },
                 "required": ["message"]
