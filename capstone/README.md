@@ -37,3 +37,8 @@ Author: Esguerra, Phillip Amir
 - **uv.lock**: A lock file for dependency management.
 - **agents/**: Includes agent-related implementations or modules.
 - **helpers/**: Contains helper functions or utilities.
+
+### Agent Structure and Orchestration
+
+- **Agent Structure**: The `agents` directory includes modular agents, each designed for specific tasks. These agents are encapsulated in a way that they can interact with the orchestrator seamlessly.
+- **Orchestrator**: The orchestrator acts as a router, delegating tasks to the appropriate agents based on the input context. It centralizes decision-making and manages the flow of information between agents. This architecture ensures scalable and maintainable agent interactions.
