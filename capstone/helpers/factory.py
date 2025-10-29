@@ -26,7 +26,7 @@ def create_document_embedder():
         return OllamaDocumentEmbedder(model=config.OLLAMA_EMBEDDING_MODEL_NAME)
     else:
         from haystack.components.embedders import OpenAIDocumentEmbedder
-        return OpenAIDocumentEmbedder()
+        return OpenAIDocumentEmbedder(model=config.OPENAI_EMBEDDING_MODEL_NAME)
     
 def create_text_embedder():
     if config.USE_LOCAL_MODEL:

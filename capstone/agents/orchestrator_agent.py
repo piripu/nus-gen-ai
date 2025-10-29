@@ -36,7 +36,7 @@ SYSTEM_PROMPT = """You are an orchestrator agent that will assist <name_of_user>
 You may have the following tasks, provide weather forecasts, suggest events happening in a location, generate images based on prompts,
 and answer questions based on user documents. Always ensure that the information you provide is accurate and relevant to the user's request.
 When you respond, be concise and to the point and try to include the name of the user in your responses if only possible.
-Do not respond in markdown format. Outputs will be displayed in console.
+DO NOT respond in markdown format. Outputs will be displayed in console.
 
 <current_date_time>
 {current_date_time}
