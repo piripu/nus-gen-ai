@@ -20,5 +20,20 @@ Author: Esguerra, Phillip Amir
 
 | Concern | Context | Resolution |
 | --- | --- | --- |
-| Use of LangChain | Based from previous experience, use of LangChain is very challenging. Community notes varies from version to version and the documentation is difficult to navigate. This might've changed with version 1.0 but there should be other options with better API. | Use Haystack. It has better API and documentation in my opinion. |
-| Agent Orchestration | Manually inspecting the response of the orchestrator agent will introduce coupling if more agents is introduced, in terms of adding it to context. | Wrap other agents as a tool to describe their capabilities and let the orchestrator agent decide on which tool to use. |
+| Use of LangChain | Based from previous experience, use of LangChain is very challenging. Community notes varies from version to version and the documentation is difficult to navigate. This might[...] |
+| Agent Orchestration | Manually inspecting the response of the orchestrator agent will introduce coupling if more agents is introduced, in terms of adding it to context. | Wrap other agents as a [...] |
+
+## Technical Details
+
+### Project Structure
+
+- **.assets/**: Contains assets related to the project.
+- **.python-version**: Specifies the Python version for the project.
+- **README.md**: Includes project documentation.
+- **config.py**: Contains configuration settings or parameters.
+- **main.py**: The primary script for the project, driving the main functionality.
+- **pyproject.toml**: Configuration for Python tools and dependencies.
+- **requirements.txt**: Lists project dependencies.
+- **uv.lock**: A lock file for dependency management.
+- **agents/**: Includes agent-related implementations or modules.
+- **helpers/**: Contains helper functions or utilities.
