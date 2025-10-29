@@ -17,22 +17,20 @@ class Result(Generic[T]):
         })
 
 class Weather:
-    def __init__(self, location, last_updated, temp_celsius, temp_fahrenheit, humidity, condition):
+    def __init__(self, location, temp_celsius, humidity, condition, description):
         self.location = location
-        self.last_updated = last_updated
         self.temp_celsius = temp_celsius
-        self.temp_fahrenheit = temp_fahrenheit
         self.humidity = humidity
         self.condition = condition
+        self.description = description
         
     def to_dict(self):
         return {
             "location": self.location,
-            "last_updated": self.last_updated,
             "temp_celsius": self.temp_celsius,
-            "temp_fahrenheit": self.temp_fahrenheit,
             "humidity": self.humidity,
-            "condition": self.condition
+            "condition": self.condition,
+            "description": self.description,
         }
         
     def __str__(self):

@@ -2,9 +2,10 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
-SERPERDEV_API_KEY = os.getenv('SERPERDEV_API_KEY')
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+VISUAL_CROSSING_API_KEY = os.getenv("VISUAL_CROSSING_API_KEY")
+SERPERDEV_API_KEY = os.getenv("SERPERDEV_API_KEY")
 
 LOG_LEVEL = "DEBUG"
 

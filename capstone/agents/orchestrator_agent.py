@@ -9,6 +9,8 @@ from agents.events_agent import EventsAgentTool
 from agents.document_agent import DocumentAgentTool
 from agents.image_generation_agent import ImageGenerationAgentTool
 from agents.recommendations_agent import RecommendationsAgentTool
+from datetime import datetime
+
 from helpers.factory import create_chat_generator
 # orchestrator states
 # date: str, time:str, location:str, weather:str, calendar_events:list[str]
@@ -19,7 +21,7 @@ def get_current_date():
     '''A simple function to get the current date.'''
     from datetime import datetime
     logger.debug("Getting current date")
-    current_datetime = datetime.now().strftime("%Y-%m-%d")
+    current_datetime = datetime.now().strftime("%A, %Y-%m-%d")
     logger.debug(f"Current date is: {current_datetime}")
     return current_datetime
 
@@ -32,15 +34,26 @@ def get_agent_tools() -> list[Tool]:
         RecommendationsAgentTool()
     ]
 
-SYSTEM_PROMPT = """You are an orchestrator agent that will assist <name_of_user>{name}</name_of_user> by leveraging multiple specialized agents to fulfill their requests.
+SYSTEM_PROMPT = """You are an orchestrator agent that will assist {name} by leveraging multiple specialized agents to fulfill their requests.
 You may have the following tasks, provide weather forecasts, suggest events happening in a location, generate images based on prompts,
 and answer questions based on user documents. Always ensure that the information you provide is accurate and relevant to the user's request.
 When you respond, be concise and to the point and try to include the name of the user in your responses if only possible.
 DO NOT respond in markdown format. Outputs will be displayed in console.
 
-<current_date_time>
-{current_date_time}
-</current_date_time>
+Use the following details or information as necessary:
+
+<name_of_user>
+{name}
+</name_of_user>
+
+<current_day_of_week>
+{current_day_of_week}
+</current_day_of_week>
+
+<current_date>
+Format="YYYY-MM-DD"
+Value={current_date}
+</current_date>
 """
 
 class OrchestratorAgent(Agent):
@@ -48,11 +61,15 @@ class OrchestratorAgent(Agent):
         self.user_name = user_name
         super().__init__(
             chat_generator=create_chat_generator(),
-            system_prompt=SYSTEM_PROMPT.format(name=user_name, current_date_time=get_current_date()),
+            system_prompt=SYSTEM_PROMPT.format(
+                name=user_name, 
+                current_day_of_week=datetime.now().strftime("%A"),
+                current_date=datetime.now().strftime("%Y-%m-%d")),
             tools=get_agent_tools(),
         )
     
     def greet_user(self) -> ChatMessage:
+        logger.info(f"System Prompt: {self.system_prompt}")
         message = [ChatMessage.from_system(f"Greet the user '{self.user_name}' warmly and introduce yourself as their personal assistant.")]
         response = self.chat_generator.run(message)
         response_text = response["replies"][-1].text

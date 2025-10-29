@@ -1,7 +1,6 @@
 from typing import Annotated
 from haystack.components.agents import Agent
 
-from haystack.core.pipeline import Pipeline
 from haystack.dataclasses import ChatMessage
 from haystack.tools import tool
 from haystack.tools.tool import Tool

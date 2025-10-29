@@ -78,3 +78,28 @@ def get_events_by_date(date: str) -> list[Event]:
         logger.debug("Closing database connection.")
         conn.close()
 
+def get_events_by_date_and_location(date:str, location:str) -> list[Event]:
+    conn = create_connection()
+
+    try:
+        c = conn.cursor()
+        # try parse date to specific format
+        date_obj = datetime.datetime.strptime(date, '%Y-%m-%d')
+        
+        logger.debug(f"Fetching events for date: {date_obj.strftime('%Y-%m-%d')} and location: {location}")
+        
+        c.execute('SELECT name, date, time, location, details FROM events WHERE date = ? AND location LIKE ?', (date_obj.strftime('%Y-%m-%d'), f'%{location}%'))
+        events = c.fetchall()
+
+        logger.debug(f"Found events: {events}")
+
+        return [Event(*event) for event in events]
+    except ValueError:
+        logger.error(f"Invalid date format: {date}. Expected YYYY-MM-DD.")
+        return []
+    except Exception as e:
+        logger.error(f"Error fetching events: {e}")
+        return []
+    finally:
+        logger.debug("Closing database connection.")
+        conn.close()
