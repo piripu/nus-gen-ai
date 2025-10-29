@@ -2,9 +2,95 @@
 
 Author: Esguerra, Phillip Amir
 
+## Project Initialization
+
+To initialize the project, follow the steps below:
+
+### Using `uv` (Preferred Method)
+
+1. Ensure you have `uv` installed. If not, install it using pip:
+
+   ```bash
+   pip install uv
+   ```
+
+2. Activate the virtual environment (if created):
+
+   ```bash
+   source venv/bin/activate  # On Windows, use `venv\\Scripts\\activate`
+   ```
+
+3. Restore the project environment using `uv`:
+
+   ```bash
+   uv restore
+   ```
+
+### Using `requirements.txt` (Alternative Method)
+
+1. Ensure you have Python installed on your system.
+
+2. Create a virtual environment (optional but recommended):
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\\Scripts\\activate`
+   ```
+
+3. Activate the virtual environment:
+
+   ```bash
+   source venv/bin/activate  # On Windows, use `venv\\Scripts\\activate`
+   ```
+
+4. Install the required dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Configuration
+
+The project configuration is designed to be simple and flexible. Below are the details of the configuration setup:
+
+### `.env` File
+
+- The `.env` file contains sensitive API keys required for the project to function. This file will be included in the project submission but the API keys will be deleted days after grading.
+- Checkers can provide their own API keys by updating the `.env` file.
+
+### Default Configuration
+
+- The project is configured to use cloud-based models instead of local models.
+- By default, any documents uploaded during a session will be stored in memory and discarded after the console session ends.
+
+### **No Further Changes Needed in Configuration**
+
+- Once the project is sent, no changes are required in the configuration. The setup is ready to use as is.
+
 ## Usage
 
-- At first run, will download the embedding model from huggingface
+To run the application, follow these steps:
+
+1. Navigate to the project directory in your terminal.
+
+2. Activate the virtual environment (if created):
+
+   ```bash
+   source venv/bin/activate  # On Windows, use `venv\\Scripts\\activate`
+   ```
+
+3. Run the application using the following command:
+
+   ```bash
+   python main.py
+   ```
+
+4. At first prompt, provide your name for a better user experience.
+
+5. To terminate the chat session, you can use any of the following commands:
+   - `/bye`
+   - `/exit`
+   - `/quit`
 
 ## Architecture
 
