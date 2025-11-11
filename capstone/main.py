@@ -2,11 +2,13 @@ from haystack.dataclasses import ChatMessage, ChatRole
 from rich import print
 
 import config, logging, os
-from config import load_config
+from config import load_config, configure_tracing
 from agents.orchestrator_agent import OrchestratorAgent
 from helpers import factory, conversation_manager, database
+from opentelemetry import trace
 
 load_config()
+configure_tracing()
 database.seed()
 
 assistant_chat_color = "green"
@@ -35,29 +37,34 @@ def print_chat_message(message: ChatMessage):
 if __name__ == "__main__":
     print(f"[bold {assistant_chat_color}]Enter your name to start[/bold {assistant_chat_color}]: ", end="")
     name = input()
-
-    user_dir = conversation_manager.get_user_conversation_dir()
-    configure_file_logger(user_dir)
-    chat_store = factory.create_chatmessage_store()
     
-    agent = OrchestratorAgent(name)
-    agent_response = agent.greet_user()
-    chat_store.write_messages([agent_response])
-    print_chat_message(agent_response)
+    tracer = trace.get_tracer(__name__)
 
-    while True:
-        print(f"[bold {user_chat_color}]{name}[/bold {user_chat_color}]: ", end="")
-        query = input()
+    with tracer.start_as_current_span("initialize_chat"):
+        print(f"[bold {assistant_chat_color}]Initializing chat for {name}...[/bold {assistant_chat_color}]")
+
+        user_dir = conversation_manager.get_user_conversation_dir()
+        configure_file_logger(user_dir)
+        chat_store = factory.create_chatmessage_store()
         
-        user_message = ChatMessage.from_user(query)
-        chat_store.write_messages([user_message])
-        
-        if query.lower() in ["/exit", "/quit", "/bye"]:
-            print(f"[bold {assistant_chat_color}]Exiting the chat. Goodbye![/bold {assistant_chat_color}]")
-            break
-        
-        response = agent.run(chat_store.messages)
-        chat_store.write_messages([response["last_message"]])
-        print_chat_message(response["last_message"])
-        
-        conversation_manager.save_conversation(user_dir, chat_store)
+        agent = OrchestratorAgent(name)
+        agent_response = agent.greet_user()
+        chat_store.write_messages([agent_response])
+        print_chat_message(agent_response)
+    
+        while True:
+            print(f"[bold {user_chat_color}]{name}[/bold {user_chat_color}]: ", end="")
+            query = input()
+            
+            user_message = ChatMessage.from_user(query)
+            chat_store.write_messages([user_message])
+            
+            if query.lower() in ["/exit", "/quit", "/bye"]:
+                print(f"[bold {assistant_chat_color}]Exiting the chat. Goodbye![/bold {assistant_chat_color}]")
+                break
+            
+            response = agent.run(chat_store.messages)
+            chat_store.write_messages([response["last_message"]])
+            print_chat_message(response["last_message"])
+            
+            conversation_manager.save_conversation(user_dir, chat_store)
